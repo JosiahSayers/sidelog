@@ -3,6 +3,14 @@ import mongoose from 'mongoose';
 export type LogStatementDocument = mongoose.Document & LogStatementInterface;
 
 export type LogLevels = 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'trace';
+export const ValidLogLevels: LogLevels[] = [
+  'debug',
+  'info',
+  'warn',
+  'error',
+  'fatal',
+  'trace'
+];
 
 export interface LogStatementInterface {
   message: string;

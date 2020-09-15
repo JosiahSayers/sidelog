@@ -26,7 +26,6 @@ export class MongoService implements DatabaseService {
   }
 
   create(obj: LogStatementInterface, clientId: string): Promise<any> {
-    console.log(this.applicationModels);
     try {
       const model = this.applicationModels.get(clientId);
 
@@ -38,6 +37,10 @@ export class MongoService implements DatabaseService {
     } catch (e) {
       console.log(`Error writing log statement to client ID ${clientId}`, e);
     }
+  }
+
+  validateClientId(clientIdToTest: string): boolean {
+    return !!this.applicationModels.get(clientIdToTest && clientIdToTest.toLowerCase());
   }
 
 }

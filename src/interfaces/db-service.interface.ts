@@ -6,4 +6,5 @@ export interface DatabaseService {
   connect: (connectionString: string) => Promise<any>;
   setupApplications: (applications: ApplicationConfig[]) => void;
   create: (obj: LogStatementInterface, clientId: string) => Promise<any>;
+  validateClientId: (clientId: string) => boolean;
 }
