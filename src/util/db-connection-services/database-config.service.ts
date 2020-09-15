@@ -52,11 +52,11 @@ export class DatabaseConfigService {
 
       this.config.applications.forEach((app, index) => {
         if (!app.name) {
-          throw new Error(`No name passed into application at index ${index}`);
+          throw new Error(`No name set on application at index ${index}`);
         }
 
         if (!app.clientId) {
-          throw new Error(`No clientId passed into application at index ${index}`);
+          throw new Error(`No clientId set on application at index ${index}`);
         }
       });
     } catch (e) {
