@@ -1,4 +1,4 @@
-import { MongoService } from './mongo-connection.service';
+import { MongoService } from './mongo.service';
 import mongoose from 'mongoose';
 import { mocked } from 'ts-jest/utils';
 import { LogStatementHelper } from '../../models/log-statement.model';
