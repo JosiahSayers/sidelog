@@ -1,9 +1,9 @@
-import NodeCache = require('node-cache');
+import { DatabaseService } from '../interfaces/db-service.interface';
 
 declare global {
   namespace Express {
     export interface Request {
-      cache: NodeCache
+      db: DatabaseService
     }
   }
 }

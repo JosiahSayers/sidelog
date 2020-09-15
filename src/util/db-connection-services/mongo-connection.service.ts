@@ -1,7 +1,11 @@
 import { DatabaseService } from '../../interfaces/db-service.interface';
 import mongoose from 'mongoose';
+import { ApplicationConfig } from '../../interfaces/application-config.interface';
+import { CreateLogStatementDocument, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
 
 export class MongoService implements DatabaseService {
+
+  private applicationModels = new Map<string, mongoose.Model<LogStatementDocument>>();
 
   connect(connectionString: string): Promise<any> {
     return mongoose.connect(connectionString, {
@@ -12,8 +16,28 @@ export class MongoService implements DatabaseService {
     });
   }
 
-  create(obj: Object): Promise<any> {
-    return new Promise(() => { });
+  setupApplications(applications: ApplicationConfig[]): void {
+    try {
+      mongoose.pluralize(null);
+      applications.forEach((app) => this.applicationModels.set(app.clientId, CreateLogStatementDocument(app.name.toLowerCase())));
+    } catch (e) {
+      console.error('Error setting up applications', e);
+    }
+  }
+
+  create(obj: LogStatementInterface, clientId: string): Promise<any> {
+    console.log(this.applicationModels);
+    try {
+      const model = this.applicationModels.get(clientId);
+
+      if (!model) {
+        throw new Error('Unknown Client ID');
+      }
+
+      return model.create(obj);
+    } catch (e) {
+      console.log(`Error writing log statement to client ID ${clientId}`, e);
+    }
   }
 
 }
