@@ -14,7 +14,7 @@ export const ValidLogLevels: LogLevels[] = [
 
 export interface LogStatementInterface {
   message: string;
-  json: object;
+  json: Record<string, unknown>;
   level: LogLevels;
 }
 
@@ -24,4 +24,5 @@ const logStatementSchema = new mongoose.Schema({
   level: { type: String, text: true },
 }, { timestamps: true });
 
-export const CreateLogStatementDocument = (appName: string) => mongoose.model<LogStatementDocument>(appName, logStatementSchema);
+export const CreateLogStatementDocument = (appName: string): mongoose.Model<LogStatementDocument> =>
+  mongoose.model<LogStatementDocument>(appName, logStatementSchema);
