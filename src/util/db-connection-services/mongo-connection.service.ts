@@ -1,7 +1,7 @@
-import { DatabaseConnectionService } from '../../interfaces/db-connect.interface';
+import { DatabaseService } from '../../interfaces/db-service.interface';
 import mongoose from 'mongoose';
 
-export class MongoConnectionService implements DatabaseConnectionService {
+export class MongoService implements DatabaseService {
 
   connect(connectionString: string): Promise<any> {
     return mongoose.connect(connectionString, {
@@ -10,6 +10,10 @@ export class MongoConnectionService implements DatabaseConnectionService {
       useUnifiedTopology: true,
       useFindAndModify: false
     });
+  }
+
+  create(obj: Object): Promise<any> {
+    return new Promise(() => { });
   }
 
 }

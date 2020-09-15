@@ -1,5 +1,5 @@
-import { DatabaseConnectionService } from './db-connect.interface'
-import { MongoConnectionService } from '../util/db-connection-services/MongoConnection.service'
+import { DatabaseService } from './db-service.interface'
+import { MongoService } from '../util/db-connection-services/mongo-connection.service'
 
 export interface DatabaseConfig {
   type: databaseConnectionTypeEnum,
@@ -8,5 +8,5 @@ export interface DatabaseConfig {
 
 export type databaseConnectionTypeEnum = 'mongo';
 
-export const databaseTypes = new Map<databaseConnectionTypeEnum, DatabaseConnectionService>()
-  .set('mongo', new MongoConnectionService());
+export const databaseTypes = new Map<databaseConnectionTypeEnum, DatabaseService>()
+  .set('mongo', new MongoService());
