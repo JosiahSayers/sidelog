@@ -1,39 +1,67 @@
-import { DatabaseConfig, databaseTypes } from '../../interfaces/database-config.interface';
+import { databaseTypes } from '../../interfaces/database-config.interface';
 import fs from 'fs';
 import { DatabaseService } from '../../interfaces/db-service.interface';
-import { ApplicationConfig } from '../../interfaces/application-config.interface';
+import { SidelogConfig } from '../../interfaces/sidelog-config.interface';
+import { environment } from '../environment';
 
 export class DatabaseConfigService {
 
-  private config: DatabaseConfig;
-  private applicationConfigs: ApplicationConfig[];
+  private config: SidelogConfig;
   databaseService: DatabaseService;
 
   connect(): Promise<any> {
-    this.readDatabaseConfig();
-    this.databaseService = databaseTypes.get(this.config.type);
-    this.readApplicationConfig();
-    this.databaseService.setupApplications(this.applicationConfigs);
-    return this.databaseService.connect(this.config.connectionString);
+    this.readConfigFromDisk();
+    this.validateConfig();
+    this.databaseService = databaseTypes.get(this.config.database.type);
+    this.databaseService.setupApplications(this.config.applications);
+    return this.databaseService.connect(this.config.database.connectionString);
   }
 
-  private readDatabaseConfig(): void {
+  private readConfigFromDisk(): void {
     try {
-      const configString = fs.readFileSync('./config/db.config.json', { encoding: 'utf-8' });
+
+      if (!environment.CONFIG_PATH) {
+        throw new Error('CONFIG_PATH environment variable was not provided');
+      }
+
+      const configString = fs.readFileSync(environment.CONFIG_PATH, { encoding: 'utf-8' });
       this.config = JSON.parse(configString);
     } catch (e) {
-      console.error('Error reading database config file', e);
-      process.exit();
+      console.error('Error reading config file from disk', e.message);
+      process.exit(9);
     }
   }
 
-  private readApplicationConfig(): void {
+  private validateConfig() {
     try {
-      const configString = fs.readFileSync('./config/applications.config.json', { encoding: 'utf-8' });
-      this.applicationConfigs = JSON.parse(configString)?.applications;
+      if (!this.config.database) {
+        throw new Error('Database config not found');
+      }
+
+      if (!this.config.database.connectionString) {
+        throw new Error('Database connection string missing');
+      }
+
+      if (!databaseTypes.get(this.config.database.type)) {
+        throw new Error(`Invalid database type: ${this.config.database.type}`);
+      }
+
+      if (!this.config.applications || this.config.applications.length === 0) {
+        throw new Error('No applications found in config file');
+      }
+
+      this.config.applications.forEach((app, index) => {
+        if (!app.name) {
+          throw new Error(`No name passed into application at index ${index}`);
+        }
+
+        if (!app.clientId) {
+          throw new Error(`No clientId passed into application at index ${index}`);
+        }
+      });
     } catch (e) {
-      console.error('Error reading application config file', e);
-      process.exit();
+      console.error(e.message);
+      process.exit(9);
     }
   }
 }
