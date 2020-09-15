@@ -23,6 +23,7 @@ coverage
 # API keys and secrets
 .env
 gcp-key.json
+config
 
 # Dependency directory
 node_modules
