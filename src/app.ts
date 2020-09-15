@@ -9,6 +9,12 @@ import logsRouter from './controllers/logs.controller';
 const app = express();
 
 const databaseConfigService = new DatabaseConfigService();
+try {
+  databaseConfigService.getConfig();
+} catch (e) {
+  console.error('Error parsing config', e);
+  process.exit(9);
+}
 databaseConfigService.connect()
   .then(() => console.log('Successfully connected to DB'))
   .catch((e) => {
