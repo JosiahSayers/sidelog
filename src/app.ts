@@ -13,7 +13,7 @@ databaseConfigService.connect()
   .then(() => console.log('Successfully connected to DB'))
   .catch((e) => {
     console.error('Error connecting to DB', e);
-    process.exit();
+    process.exit(9);
   });
 
 app.set('port', environment.PORT);
