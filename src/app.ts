@@ -25,6 +25,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/logs', logsRouter)
+app.use('/logs', logsRouter);
 
 export default app;

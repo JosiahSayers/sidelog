@@ -5,13 +5,13 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --watch",
-    "test:single": "jest",
+    "test:single": "jest --passWithNoTests",
     "watch": "ENVIRONMENT=local concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-ts": "tsc -w",
     "watch-node": "nodemon dist/server.js",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
-    "ci": "npm i && npm run lint && npm run test:single"
+    "ci": "npm i && npm run lint && npm run test:single && npm run build"
   },
   "repository": {
     "type": "git",
@@ -42,10 +42,13 @@
     "@types/jest": "^26.0.13",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
     "concurrently": "^5.3.0",
     "eslint": "^7.9.0",
     "jest": "^26.4.2",
     "nodemon": "^2.0.4",
+    "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   }

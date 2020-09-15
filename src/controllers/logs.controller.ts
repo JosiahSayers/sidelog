@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import { LogsHelperService } from './logs-helper.service';
 
 const router = express.Router();
 
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     await LogsHelperService.createLog(req);
     return res.status(201).send();

@@ -1,16 +1,16 @@
-import { Request } from 'express'
+import { Request } from 'express';
 import { LogStatementInterface, ValidLogLevels } from '../models/log-statement.model';
 import { buildError } from '../util/error-builder';
 
-const createLog = async (req: Request) => {
+const createLog = async (req: Request): Promise<any> => {
   try {
     const clientId = <string>req.headers.clientid;
     const logObject = req.body;
-    validateLogRequest(req, clientId, logObject)
+    validateLogRequest(req, clientId, logObject);
     return req.db.create(logObject, clientId);
   } catch (e) {
     const messageObject = JSON.parse(e.message);
-    console.error('Error Creating Log', e)
+    console.error('Error Creating Log', e);
 
     if (!messageObject?.responseCode) {
       throw new Error(buildError({
