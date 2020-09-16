@@ -6,12 +6,15 @@ import { environment } from '../environment';
 
 export class DatabaseConfigService {
 
-  private config: SidelogConfig;
+  config: SidelogConfig;
   databaseService: DatabaseService;
 
-  connect(): Promise<any> {
+  getConfig(): void {
     this.readConfigFromDisk();
     this.validateConfig();
+  }
+
+  connect(): Promise<any> {
     this.databaseService = databaseTypes.get(this.config.database.type);
     this.databaseService.setupApplications(this.config.applications);
     return this.databaseService.connect(this.config.database.connectionString);
@@ -28,40 +31,36 @@ export class DatabaseConfigService {
       this.config = JSON.parse(configString);
     } catch (e) {
       console.error('Error reading config file from disk', e.message);
-      process.exit(9);
+      throw e;
     }
   }
 
   private validateConfig() {
-    try {
-      if (!this.config.database) {
-        throw new Error('Database config not found');
-      }
-
-      if (!this.config.database.connectionString) {
-        throw new Error('Database connection string missing');
-      }
-
-      if (!databaseTypes.get(this.config.database.type)) {
-        throw new Error(`Invalid database type: ${this.config.database.type}`);
-      }
-
-      if (!this.config.applications || this.config.applications.length === 0) {
-        throw new Error('No applications found in config file');
-      }
-
-      this.config.applications.forEach((app, index) => {
-        if (!app.name) {
-          throw new Error(`No name set on application at index ${index}`);
-        }
-
-        if (!app.clientId) {
-          throw new Error(`No clientId set on application at index ${index}`);
-        }
-      });
-    } catch (e) {
-      console.error(e.message);
-      process.exit(9);
+    if (!this.config.database) {
+      throw new Error('Database config not found');
     }
+
+    if (!this.config.database.connectionString) {
+      throw new Error('Database connection string missing');
+    }
+
+    if (!databaseTypes.get(this.config.database.type)) {
+      throw new Error(`Invalid database type: ${this.config.database.type}`);
+    }
+
+    if (!this.config.applications || this.config.applications.length === 0) {
+      throw new Error('No applications found in config file');
+    }
+
+    this.config.applications.forEach((app, index) => {
+      if (!app.name) {
+        throw new Error(`No name set on application at index ${index}`);
+      }
+
+      if (!app.clientId) {
+        throw new Error(`No clientId set on application at index ${index}`);
+      }
+    });
+
   }
 }

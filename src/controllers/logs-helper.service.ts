@@ -19,7 +19,6 @@ const createLog = async (req: Request): Promise<any> => {
         responseCode: 500
       }));
     }
-
     throw e;
   }
 };

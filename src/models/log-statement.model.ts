@@ -24,5 +24,9 @@ const logStatementSchema = new mongoose.Schema({
   level: { type: String, text: true },
 }, { timestamps: true });
 
-export const CreateLogStatementDocument = (appName: string): mongoose.Model<LogStatementDocument> =>
+const createLogStatementDocument = (appName: string): mongoose.Model<LogStatementDocument> =>
   mongoose.model<LogStatementDocument>(appName, logStatementSchema);
+
+export const LogStatementHelper = {
+  createLogStatementDocument
+};

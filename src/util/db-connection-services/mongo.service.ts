@@ -1,11 +1,11 @@
 import { DatabaseService } from '../../interfaces/db-service.interface';
 import mongoose from 'mongoose';
 import { ApplicationConfig } from '../../interfaces/application-config.interface';
-import { CreateLogStatementDocument, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
+import { LogStatementHelper, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
 
 export class MongoService implements DatabaseService {
 
-  private applicationModels = new Map<string, mongoose.Model<LogStatementDocument>>();
+  applicationModels = new Map<string, mongoose.Model<LogStatementDocument>>();
 
   connect(connectionString: string): Promise<any> {
     return mongoose.connect(connectionString, {
@@ -19,7 +19,7 @@ export class MongoService implements DatabaseService {
   setupApplications(applications: ApplicationConfig[]): void {
     try {
       mongoose.pluralize(null);
-      applications.forEach((app) => this.applicationModels.set(app.clientId, CreateLogStatementDocument(app.name.toLowerCase())));
+      applications.forEach((app) => this.applicationModels.set(app.clientId, LogStatementHelper.createLogStatementDocument(app.name.toLowerCase())));
     } catch (e) {
       console.error('Error setting up applications', e);
     }
