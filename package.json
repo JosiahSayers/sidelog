@@ -1,17 +1,17 @@
 {
   "name": "sidelog",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Easy logging for side projects",
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --watch",
     "test:single": "jest --passWithNoTests",
-    "watch": "ENVIRONMENT=local concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-    "watch-ts": "tsc -w",
-    "watch-node": "nodemon dist/server.js",
+    "watch": "nodemon",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
-    "ci": "npm i && npm run lint && npm run test:single && npm run build"
+    "ci": "npm i && npm run lint && npm run test:single && npm run build",
+    "forever": "forever start dist/server.js",
+    "start": "npm run forever"
   },
   "repository": {
     "type": "git",

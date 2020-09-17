@@ -1,6 +1,8 @@
-export function buildError(obj: errorObject): string {
-  return JSON.stringify(obj);
+export function buildError(obj: errorObject): SidelogError {
+  return new SidelogError(JSON.stringify(obj));
 }
+
+export class SidelogError extends Error { }
 
 interface errorObject {
   message: string;

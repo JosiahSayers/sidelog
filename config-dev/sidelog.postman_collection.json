@@ -1,0 +1,44 @@
+{
+	"info": {
+		"_postman_id": "957a6982-1732-4b4a-8f99-370940e2aae1",
+		"name": "sidelog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Logs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "clientId",
+						"value": "1234567890",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": \"Test Message\",\n    \"level\": \"info\",\n    \"json\": {\n        \"string\": \"This is a test string\",\n        \"number\": 400\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/logs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logs"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
