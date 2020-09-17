@@ -163,16 +163,16 @@ Project Link: [https://github.com/JosiahSayers/sidelog](https://github.com/Josia
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/JosiahSayers/repo.svg?style=flat-square
-[contributors-url]: https://github.com/JosiahSayers/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/JosiahSayers/repo.svg?style=flat-square
-[forks-url]: https://github.com/JosiahSayers/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/JosiahSayers/repo.svg?style=flat-square
-[stars-url]: https://github.com/JosiahSayers/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/JosiahSayers/repo.svg?style=flat-square
-[issues-url]: https://github.com/JosiahSayers/repo/issues
-[license-shield]: https://img.shields.io/github/license/JosiahSayers/repo.svg?style=flat-square
-[license-url]: https://github.com/JosiahSayers/repo/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/JosiahSayers/sidelog.svg?style=flat-square
+[contributors-url]: https://github.com/JosiahSayers/sidelog/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/JosiahSayers/sidelog.svg?style=flat-square
+[forks-url]: https://github.com/JosiahSayers/sidelog/network/members
+[stars-shield]: https://img.shields.io/github/stars/JosiahSayers/sidelog.svg?style=flat-square
+[stars-url]: https://github.com/JosiahSayers/sidelog/stargazers
+[issues-shield]: https://img.shields.io/github/issues/JosiahSayers/sidelog.svg?style=flat-square
+[issues-url]: https://github.com/JosiahSayers/sidelog/issues
+[license-shield]: https://img.shields.io/github/license/JosiahSayers/sidelog.svg?style=flat-square
+[license-url]: https://github.com/JosiahSayers/sidelog/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/josiah-sayers
 [product-screenshot]: images/screenshot.png
