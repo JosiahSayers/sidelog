@@ -109,8 +109,9 @@ describe('LogsHelperService', () => {
 
       it('any other exception is caught', async () => {
         const req = createMockRequest('CLIENT ID', { message: 'MESSAGE', level: 'info' });
+        const testError = new Error('TEST');
         req.db.validateClientId.mockReturnValue(true);
-        req.db.create.mockImplementation(() => { throw new Error(); });
+        req.db.create.mockImplementation(() => { throw testError; });
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -118,6 +119,7 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
+        expect(req.logger.log).toHaveBeenCalledWith('TEST', { callStack: testError.stack });
         expect(error).toEqual(buildError({
           message: 'Unknown error occured',
           developerMessage: 'Please check the app logs and report anything that looks fishy on GitHub, thanks!',
@@ -128,7 +130,7 @@ describe('LogsHelperService', () => {
   });
 });
 
-const createMockRequest = (clientId: string, body: Record<string, unknown>): Request & { db: { create: jest.Mock, validateClientId: jest.Mock } } => <any>({
+const createMockRequest = (clientId: string, body: Record<string, unknown>): Request & { db: { create: jest.Mock, validateClientId: jest.Mock }, logger: { log: jest.Mock } } => <any>({
   headers: {
     clientid: clientId
   },
@@ -136,5 +138,8 @@ const createMockRequest = (clientId: string, body: Record<string, unknown>): Req
   db: {
     create: jest.fn(),
     validateClientId: jest.fn()
+  },
+  logger: {
+    log: jest.fn()
   }
 });

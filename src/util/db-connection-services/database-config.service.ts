@@ -3,6 +3,7 @@ import fs from 'fs';
 import { DatabaseService } from '../../interfaces/db-service.interface';
 import { SidelogConfig } from '../../interfaces/sidelog-config.interface';
 import { environment } from '../environment';
+import { sidelogAppConfig } from './sidelog-application-config';
 
 export class DatabaseConfigService {
 
@@ -16,7 +17,7 @@ export class DatabaseConfigService {
 
   connect(): Promise<any> {
     this.databaseService = databaseTypes.get(this.config.database.type);
-    this.databaseService.setupApplications(this.config.applications);
+    this.databaseService.setupApplications([...this.config.applications, sidelogAppConfig]);
     return this.databaseService.connect(this.config.database.connectionString);
   }
 

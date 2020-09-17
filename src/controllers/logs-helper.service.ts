@@ -11,7 +11,7 @@ const createLog = async (req: Request): Promise<any> => {
     return;
   } catch (e) {
     if (!(e instanceof SidelogError)) {
-      console.error(e);
+      req.logger.log(e.message, { callStack: e.stack });
       throw buildError({
         message: 'Unknown error occured',
         developerMessage: 'Please check the app logs and report anything that looks fishy on GitHub, thanks!',

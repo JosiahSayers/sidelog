@@ -4,6 +4,7 @@ import { environment } from '../../util/environment';
 import { DatabaseConfigService } from './database-config.service';
 import { mocked } from 'ts-jest/utils';
 import { databaseTypes } from '../../interfaces/database-config.interface';
+import { sidelogAppConfig } from './sidelog-application-config';
 
 describe('DatabaseConfigService', () => {
   const service = new DatabaseConfigService();
@@ -149,9 +150,12 @@ describe('DatabaseConfigService', () => {
       expect(service.databaseService).toBe(mockedDB);
     });
 
-    it('passes the config applications to setupApplications', () => {
+    it('passes the config applications plus the sidelog app config to setupApplications', () => {
       service.connect();
-      expect(mockedDB.setupApplications).toHaveBeenCalledWith(testConfig.applications);
+      expect(mockedDB.setupApplications).toHaveBeenCalledWith([
+        ...testConfig.applications,
+        sidelogAppConfig
+      ]);
     });
 
     it('returns the value of the connect method', () => {
