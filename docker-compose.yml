@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  sidelog:
+    image: sidelog
+    build: .
+    environment:
+      NODE_ENV: development
+      CONFIG_PATH: /usr/src/app/config-dev/docker-mongo.config.json
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+    links:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+volumes:
+  data:

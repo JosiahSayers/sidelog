@@ -1,23 +1,32 @@
 import { Request } from 'express';
 import { LogStatementInterface, ValidLogLevels } from '../models/log-statement.model';
 import { buildError } from '../util/error-builder';
+import { MongoError } from 'mongodb';
 
 const createLog = async (req: Request): Promise<any> => {
   try {
     const clientId = <string>req.headers.clientid;
     const logObject = req.body;
     validateLogRequest(req, clientId, logObject);
-    return req.db.create(logObject, clientId);
+    await req.db.create(logObject, clientId);
+    return;
   } catch (e) {
+    console.error(e);
+
+    const genericError = new Error(buildError({
+      message: 'Unknown error occured',
+      developerMessage: 'Please check the app logs and report anything that looks fishy on GitHub, thanks!',
+      responseCode: 500
+    }));
+
+    if (e instanceof MongoError) {
+      throw genericError;
+    }
+
     const messageObject = JSON.parse(e.message);
-    console.error('Error Creating Log', e);
 
     if (!messageObject?.responseCode) {
-      throw new Error(buildError({
-        message: 'Unknown error occured',
-        developerMessage: 'Please check the app logs and report anything that looks fishy on GitHub, thanks!',
-        responseCode: 500
-      }));
+      throw genericError;
     }
     throw e;
   }
