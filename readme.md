@@ -74,7 +74,7 @@ npm install
 3. Create config file
   - A sample config file can be found in `config-dev/docker-mongo.config.json`
   - Config Schema:
-  ```JSON
+  ```
   {
     "database": {
       "type": "mongo", // Only mongo is supported at the moment with more options coming soon
@@ -103,7 +103,7 @@ Adding new log statements from your side projects is accomplished through a `POS
 
 The body of the request should be shaped like the following example:
 
-```JSON
+```
 {
     "message": "Test Message", // Required
     "level": "info", // Required. Valid values are: 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'trace'
