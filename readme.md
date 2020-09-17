@@ -93,6 +93,10 @@ CONFIG_PATH=<path_to_config_file> npm start
 
 // CONFIG_PATH=./config-dev/docker-mongo.config.json npm start //
 ```
+Optional Environment Variables
+  - ENV_FILE: Used to specify a path to an `env` file to use instead of passing in values at runtime, defaults to '.env';
+  - PORT: Used to specify which port sidelog should run on, defaults to 3000.
+  - LOG_SERVER_ERRORS: Used to specify whether sidelog should log any server errors into the database for future reference/bug fixes. Pass false to disable, defaults to enabled.
 
 
 
