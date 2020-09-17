@@ -9,7 +9,7 @@
 
 <br />
 <p align="center">
-  <h3 align="center">sidelog</h3>
+  <h1 align="center">sidelog</h3>
 
   <p align="center">
     Easy logging for your side projects
