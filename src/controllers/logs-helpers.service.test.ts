@@ -15,11 +15,11 @@ describe('LogsHelperService', () => {
         } catch (e) {
           error = e;
         }
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Missing Client ID',
           developerMessage: 'Send a valid Client ID in the "clientId" header',
           responseCode: 400
-        })));
+        }));
       });
 
       it('gets an invalid client id', async () => {
@@ -32,11 +32,11 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Invalid Client ID',
           developerMessage: 'The passed in Client ID has not been setup. ID passed: INVALID',
           responseCode: 400
-        })));
+        }));
       });
 
       it('does not get a log object', async () => {
@@ -49,11 +49,11 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Missing log object',
           developerMessage: 'Send a valid body with the request',
           responseCode: 400
-        })));
+        }));
       });
 
       it('does not get a log object message', async () => {
@@ -66,11 +66,11 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Missing log message',
           developerMessage: 'Send a valid message field on the body',
           responseCode: 400
-        })));
+        }));
       });
 
       it('does not get a log object level', async () => {
@@ -83,11 +83,11 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Missing log level',
           developerMessage: `Send a valid log level with the request. Valid Log Levels: ${JSON.stringify(ValidLogLevels)}`,
           responseCode: 400
-        })));
+        }));
       });
 
       it('gets an invalid log level', async () => {
@@ -100,11 +100,29 @@ describe('LogsHelperService', () => {
           error = e;
         }
 
-        expect(error).toEqual(new Error(buildError({
+        expect(error).toEqual(buildError({
           message: 'Invalid log level',
           developerMessage: `Send a valid log level with the request. Valid Log Levels: ${JSON.stringify(ValidLogLevels)}`,
           responseCode: 400
-        })));
+        }));
+      });
+
+      it('any other exception is caught', async () => {
+        const req = createMockRequest('CLIENT ID', { message: 'MESSAGE', level: 'info' });
+        req.db.validateClientId.mockReturnValue(true);
+        req.db.create.mockImplementation(() => { throw new Error(); });
+        let error;
+        try {
+          await LogsHelperService.createLog(req);
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error).toEqual(buildError({
+          message: 'Unknown error occured',
+          developerMessage: 'Please check the app logs and report anything that looks fishy on GitHub, thanks!',
+          responseCode: 500
+        }));
       });
     });
   });
