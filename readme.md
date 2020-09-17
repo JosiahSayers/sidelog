@@ -147,7 +147,7 @@ To contribute:
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. https://josiah-sayers.mit-license.org/
 
 
 
