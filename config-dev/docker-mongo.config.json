@@ -1,0 +1,12 @@
+{
+  "database": {
+    "type": "mongo",
+    "connectionString": "mongodb://mongodb:27017/sidelog"
+  },
+  "applications": [
+    {
+      "name": "Development",
+      "clientId": "1234567890"
+    }
+  ]
+}

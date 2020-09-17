@@ -1,17 +1,17 @@
 {
   "name": "sidelog",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Easy logging for side projects",
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --watch",
-    "test:single": "jest",
-    "watch": "ENVIRONMENT=local concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-    "watch-ts": "tsc -w",
-    "watch-node": "nodemon dist/server.js",
+    "test:single": "jest --passWithNoTests",
+    "watch": "nodemon",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
-    "ci": "npm i && npm run lint && npm run test:single"
+    "ci": "npm i && npm run lint && npm run test:single && npm run build",
+    "forever": "forever start dist/server.js",
+    "start": "npm run forever"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "analytics"
   ],
   "author": "Josiah Sayers",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/JosiahSayers/sidelog/issues"
   },
@@ -33,7 +33,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.5"
+    "mongoose": "^5.10.5",
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.7",
@@ -41,10 +42,13 @@
     "@types/jest": "^26.0.13",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
     "concurrently": "^5.3.0",
     "eslint": "^7.9.0",
     "jest": "^26.4.2",
     "nodemon": "^2.0.4",
+    "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   }
