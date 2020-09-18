@@ -3,11 +3,12 @@ import { Application, ApplicationConfig } from '../../interfaces/application-con
 export class BaseDatabaseService {
   applications = new Map<string, Application>();
 
-  onboardApplication(app: ApplicationConfig, dbAccessor: any): void {
+  onboardApplication(app: ApplicationConfig, dbAccessor: unknown): void {
     this.applications.set(app.clientId, {
       name: app.name,
       clientId: app.clientId,
       approvedOrigins: app.approvedOrigins || [],
+      autoLogHeaders: app.autoLogHeaders || [],
       dbAccessor
     });
   }

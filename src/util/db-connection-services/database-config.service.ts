@@ -4,11 +4,14 @@ import { DatabaseService } from '../../interfaces/db-service.interface';
 import { SidelogConfig } from '../../interfaces/sidelog-config.interface';
 import { environment } from '../environment';
 import { sidelogAppConfig } from './sidelog-application-config';
+import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
+import { ErrorLogger } from '../error-logging-service/error-logger.service';
 
 export class DatabaseConfigService {
 
   config: SidelogConfig;
   databaseService: DatabaseService;
+  logger: ErrorLogger;
 
   getConfig(): void {
     this.readConfigFromDisk();
@@ -60,6 +63,22 @@ export class DatabaseConfigService {
 
       if (!app.clientId) {
         throw new Error(`No clientId set on application at index ${index}`);
+      }
+
+      if (app.autoLogHeaders) {
+        const headersToRemove: string[] = [];
+
+        app.autoLogHeaders.forEach((header) => {
+          if (!Object.values(AutoLogHeaderEnum).includes(header)) {
+            console.warn(`WARNING: ${header} is not a valid auto log option and will be ignored.`);
+            headersToRemove.push(header);
+          }
+        });
+
+        headersToRemove.forEach((header) => {
+          const index = app.autoLogHeaders.findIndex(<any>header);
+          app.autoLogHeaders.splice(index, 1);
+        });
       }
     });
 
