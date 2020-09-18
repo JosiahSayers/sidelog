@@ -6,7 +6,11 @@
   "applications": [
     {
       "name": "Development",
-      "clientId": "1234567890"
+      "clientId": "1234567890",
+      "approvedOrigins": [
+        "https://test.com",
+        "https://www.test.com"
+      ]
     }
   ]
 }
