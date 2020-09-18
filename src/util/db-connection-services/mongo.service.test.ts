@@ -2,6 +2,7 @@ import { MongoService } from './mongo.service';
 import mongoose from 'mongoose';
 import { mocked } from 'ts-jest/utils';
 import { LogStatementHelper } from '../../models/log-statement.model';
+import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
 jest.mock('mongoose');
 
 describe('MongoService', () => {
@@ -39,7 +40,10 @@ describe('MongoService', () => {
       service.setupApplications([
         {
           name: 'APP 1',
-          clientId: 'CLIENT ID 1'
+          clientId: 'CLIENT ID 1',
+          autoLogHeaders: [
+            AutoLogHeaderEnum.ORIGIN
+          ]
         },
         {
           name: 'APP 2',
@@ -55,6 +59,9 @@ describe('MongoService', () => {
         name: 'APP 1',
         clientId: 'CLIENT ID 1',
         approvedOrigins: [],
+        autoLogHeaders: [
+          AutoLogHeaderEnum.ORIGIN
+        ],
         dbAccessor: 'app 1 DB ACCESSOR'
       });
       expect(service.applications.get('CLIENT ID 2')).toEqual({
@@ -64,6 +71,7 @@ describe('MongoService', () => {
           'test.com',
           'example.com'
         ],
+        autoLogHeaders: [],
         dbAccessor: 'app 2 DB ACCESSOR'
       });
     });

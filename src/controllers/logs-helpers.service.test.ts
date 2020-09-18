@@ -2,6 +2,8 @@ import { Request } from 'express';
 import { LogsHelperService } from './logs-helper.service';
 import { buildError } from '../util/error-builder';
 import { ValidLogLevels } from '../models/log-statement.model';
+import { DatabaseService } from '../interfaces/db-service.interface';
+import { ErrorLogger } from '../util/error-logging-service/error-logger.service';
 
 describe('LogsHelperService', () => {
   console.error = jest.fn();
@@ -11,7 +13,7 @@ describe('LogsHelperService', () => {
         const req = createMockRequest('', '', {});
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -27,7 +29,7 @@ describe('LogsHelperService', () => {
         req.db.isValidClientId.mockReturnValue(false);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -45,7 +47,7 @@ describe('LogsHelperService', () => {
         req.db.isValidOrigin.mockReturnValue(false);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -63,7 +65,7 @@ describe('LogsHelperService', () => {
         req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -81,7 +83,7 @@ describe('LogsHelperService', () => {
         req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -99,7 +101,7 @@ describe('LogsHelperService', () => {
         req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -117,7 +119,7 @@ describe('LogsHelperService', () => {
         req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -137,7 +139,7 @@ describe('LogsHelperService', () => {
         req.db.create.mockImplementation(() => { throw testError; });
         let error;
         try {
-          await LogsHelperService.createLog(req);
+          await LogsHelperService.createLog(<any>req);
         } catch (e) {
           error = e;
         }
@@ -153,7 +155,7 @@ describe('LogsHelperService', () => {
   });
 });
 
-const createMockRequest = (clientId: string, origin: string, body: Record<string, unknown>): Request & { db: { create: jest.Mock, isValidClientId: jest.Mock, isValidOrigin: jest.Mock }, logger: { log: jest.Mock } } => <any>({
+const createMockRequest = (clientId: string, origin: string, body: Record<string, unknown>): MockRequest => <any>({
   headers: {
     clientid: clientId,
     origin
@@ -162,9 +164,22 @@ const createMockRequest = (clientId: string, origin: string, body: Record<string
   db: {
     create: jest.fn(),
     isValidClientId: jest.fn(),
-    isValidOrigin: jest.fn()
+    isValidOrigin: jest.fn(),
+    getAutoLogObjectForApp: jest.fn()
   },
   logger: {
     log: jest.fn()
   }
 });
+
+interface MockRequest extends Request {
+  db: DatabaseService & {
+    create: jest.Mock,
+    isValidClientId: jest.Mock,
+    isValidOrigin: jest.Mock,
+    getAutoLogObjectForApp: jest.Mock
+  },
+  logger: ErrorLogger & {
+    log: jest.Mock
+  }
+}

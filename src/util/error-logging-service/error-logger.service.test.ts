@@ -25,7 +25,7 @@ describe('ErrorLogger', () => {
         json: {},
         level: 'error'
       },
-        sidelogAppConfig.clientId
+        sidelogAppConfig
       );
     });
 
