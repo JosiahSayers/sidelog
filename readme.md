@@ -82,7 +82,11 @@ npm install
     "applications": [
       {
         "name": "MyAwesomeApplication", // Every application gets its own table in the database, alpha characters only.
-        "clientId": "24a32b74-c22e-470a-84a5-ce74894626d5" // Identifier used in API requests
+        "clientId": "24a32b74-c22e-470a-84a5-ce74894626d5", // Identifier used in API requests.
+        "approvedOrigins": [ // Optional, if provided only requests with an approved origin header will succeed.
+          "https://test.com",
+          "https://www.test.com"
+        ]
       }
     ]
   }
