@@ -7,7 +7,7 @@ jest.mock('mongoose');
 describe('MongoService', () => {
   const mockedDB = mocked(mongoose);
   const service = new MongoService();
-  LogStatementHelper.createLogStatementDocument = jest.fn().mockImplementation((name: string) => name);
+  LogStatementHelper.createLogStatementDocument = jest.fn().mockImplementation((name: string) => `${name} DB ACCESSOR`);
 
   describe('connect', () => {
     it('calls mongoose\'s connect method with the correct arguments', () => {
@@ -43,12 +43,29 @@ describe('MongoService', () => {
         },
         {
           name: 'APP 2',
-          clientId: 'CLIENT ID 2'
+          clientId: 'CLIENT ID 2',
+          approvedOrigins: [
+            'test.com',
+            'example.com'
+          ]
         }
       ]);
       expect(service.applicationModels.size).toBe(2);
-      expect(service.applicationModels.get('CLIENT ID 1')).toBe('app 1');
-      expect(service.applicationModels.get('CLIENT ID 2')).toBe('app 2');
+      expect(service.applicationModels.get('CLIENT ID 1')).toEqual({
+        name: 'APP 1',
+        clientId: 'CLIENT ID 1',
+        approvedOrigins: [],
+        dbAccessor: 'app 1 DB ACCESSOR'
+      });
+      expect(service.applicationModels.get('CLIENT ID 2')).toEqual({
+        name: 'APP 2',
+        clientId: 'CLIENT ID 2',
+        approvedOrigins: [
+          'test.com',
+          'example.com'
+        ],
+        dbAccessor: 'app 2 DB ACCESSOR'
+      });
     });
   });
 });

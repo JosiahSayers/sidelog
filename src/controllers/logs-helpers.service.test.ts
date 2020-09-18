@@ -8,7 +8,7 @@ describe('LogsHelperService', () => {
   describe('createLog', () => {
     describe('throws an error when', () => {
       it('does not get a client id', async () => {
-        const req = createMockRequest('', {});
+        const req = createMockRequest('', '', {});
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -23,8 +23,8 @@ describe('LogsHelperService', () => {
       });
 
       it('gets an invalid client id', async () => {
-        const req = createMockRequest('INVALID', {});
-        req.db.validateClientId.mockReturnValue(false);
+        const req = createMockRequest('INVALID', '', {});
+        req.db.isValidClientId.mockReturnValue(false);
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -39,9 +39,28 @@ describe('LogsHelperService', () => {
         }));
       });
 
+      it('gets an origin that is invalid', async () => {
+        const req = createMockRequest('CLIENT_ID', 'INVALID', {});
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(false);
+        let error;
+        try {
+          await LogsHelperService.createLog(req);
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error).toEqual(buildError({
+          message: 'Unapproved origin',
+          developerMessage: 'The origin INVALID has not been approved for use with client ID CLIENT_ID',
+          responseCode: 400
+        }));
+      });
+
       it('does not get a log object', async () => {
-        const req = createMockRequest('CLIENT ID', null);
-        req.db.validateClientId.mockReturnValue(true);
+        const req = createMockRequest('CLIENT ID', '', null);
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -57,8 +76,9 @@ describe('LogsHelperService', () => {
       });
 
       it('does not get a log object message', async () => {
-        const req = createMockRequest('CLIENT ID', { level: 'info' });
-        req.db.validateClientId.mockReturnValue(true);
+        const req = createMockRequest('CLIENT ID', '', { level: 'info' });
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -74,8 +94,9 @@ describe('LogsHelperService', () => {
       });
 
       it('does not get a log object level', async () => {
-        const req = createMockRequest('CLIENT ID', { message: 'MESSAGE' });
-        req.db.validateClientId.mockReturnValue(true);
+        const req = createMockRequest('CLIENT ID', '', { message: 'MESSAGE' });
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -91,8 +112,9 @@ describe('LogsHelperService', () => {
       });
 
       it('gets an invalid log level', async () => {
-        const req = createMockRequest('CLIENT ID', { message: 'MESSAGE', level: 'INVALID' });
-        req.db.validateClientId.mockReturnValue(true);
+        const req = createMockRequest('CLIENT ID', '', { message: 'MESSAGE', level: 'INVALID' });
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(true);
         let error;
         try {
           await LogsHelperService.createLog(req);
@@ -108,9 +130,10 @@ describe('LogsHelperService', () => {
       });
 
       it('any other exception is caught', async () => {
-        const req = createMockRequest('CLIENT ID', { message: 'MESSAGE', level: 'info' });
+        const req = createMockRequest('CLIENT ID', '', { message: 'MESSAGE', level: 'info' });
         const testError = new Error('TEST');
-        req.db.validateClientId.mockReturnValue(true);
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(true);
         req.db.create.mockImplementation(() => { throw testError; });
         let error;
         try {
@@ -130,14 +153,16 @@ describe('LogsHelperService', () => {
   });
 });
 
-const createMockRequest = (clientId: string, body: Record<string, unknown>): Request & { db: { create: jest.Mock, validateClientId: jest.Mock }, logger: { log: jest.Mock } } => <any>({
+const createMockRequest = (clientId: string, origin: string, body: Record<string, unknown>): Request & { db: { create: jest.Mock, isValidClientId: jest.Mock, isValidOrigin: jest.Mock }, logger: { log: jest.Mock } } => <any>({
   headers: {
-    clientid: clientId
+    clientid: clientId,
+    origin
   },
   body,
   db: {
     create: jest.fn(),
-    validateClientId: jest.fn()
+    isValidClientId: jest.fn(),
+    isValidOrigin: jest.fn()
   },
   logger: {
     log: jest.fn()

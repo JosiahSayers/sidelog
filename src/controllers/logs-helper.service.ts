@@ -6,7 +6,8 @@ const createLog = async (req: Request): Promise<any> => {
   try {
     const clientId = <string>req.headers.clientid;
     const logObject = req.body;
-    validateLogRequest(req, clientId, logObject);
+    const origin = req.headers.origin;
+    validateLogRequest(req, clientId, origin, logObject);
     await req.db.create(logObject, clientId);
     return;
   } catch (e) {
@@ -23,7 +24,7 @@ const createLog = async (req: Request): Promise<any> => {
   }
 };
 
-const validateLogRequest = (req: Request, clientId: string, logMessage: LogStatementInterface): logMessage is LogStatementInterface => {
+const validateLogRequest = (req: Request, clientId: string, origin: string, logMessage: LogStatementInterface): logMessage is LogStatementInterface => {
   if (!clientId) {
     throw buildError({
       message: 'Missing Client ID',
@@ -32,10 +33,18 @@ const validateLogRequest = (req: Request, clientId: string, logMessage: LogState
     });
   }
 
-  if (!req.db.validateClientId(clientId)) {
+  if (!req.db.isValidClientId(clientId)) {
     throw buildError({
       message: 'Invalid Client ID',
       developerMessage: `The passed in Client ID has not been setup. ID passed: ${clientId}`,
+      responseCode: 400
+    });
+  }
+
+  if (!req.db.isValidOrigin(origin, clientId)) {
+    throw buildError({
+      message: 'Unapproved origin',
+      developerMessage: `The origin ${origin} has not been approved for use with client ID ${clientId}`,
       responseCode: 400
     });
   }
