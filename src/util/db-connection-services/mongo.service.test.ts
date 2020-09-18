@@ -50,14 +50,14 @@ describe('MongoService', () => {
           ]
         }
       ]);
-      expect(service.applicationModels.size).toBe(2);
-      expect(service.applicationModels.get('CLIENT ID 1')).toEqual({
+      expect(service.applications.size).toBe(2);
+      expect(service.applications.get('CLIENT ID 1')).toEqual({
         name: 'APP 1',
         clientId: 'CLIENT ID 1',
         approvedOrigins: [],
         dbAccessor: 'app 1 DB ACCESSOR'
       });
-      expect(service.applicationModels.get('CLIENT ID 2')).toEqual({
+      expect(service.applications.get('CLIENT ID 2')).toEqual({
         name: 'APP 2',
         clientId: 'CLIENT ID 2',
         approvedOrigins: [
