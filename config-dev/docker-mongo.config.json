@@ -12,7 +12,8 @@
         "https://www.test.com"
       ],
       "autoLogHeaders": [
-        "origin"
+        "origin",
+        "user-agent"
       ]
     }
   ]

@@ -1,3 +1,4 @@
+import { IncomingHttpHeaders } from 'http';
 import { Application, ApplicationConfig } from '../../interfaces/application-config.interface';
 
 export class BaseDatabaseService {
@@ -20,5 +21,14 @@ export class BaseDatabaseService {
   isValidOrigin(originToTest: string, clientId: string): boolean {
     const app = this.applications.get(clientId);
     return app?.approvedOrigins.length === 0 || app?.approvedOrigins.includes(originToTest);
+  }
+
+  getAutoLogObjectForApp(headers: IncomingHttpHeaders): Record<string, string> {
+    const autoLogs: Record<string, string> = {};
+    const app = this.applications.get(<string>headers.clientid);
+
+    app?.autoLogHeaders.forEach((header) => autoLogs[header] = <string>headers[header]);
+
+    return autoLogs;
   }
 }

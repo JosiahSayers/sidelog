@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { ApplicationConfig, Application } from '../../interfaces/application-config.interface';
 import { LogStatementHelper, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
 import { BaseDatabaseService } from './base-database.service';
+import { IncomingHttpHeaders } from 'http';
 
 export class MongoService extends BaseDatabaseService implements DatabaseService {
 
@@ -22,15 +23,14 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
       mongoose.pluralize(null);
       applications.forEach((app) =>
         super.onboardApplication(app, LogStatementHelper.createLogStatementDocument(app.name.toLowerCase())));
-      console.log(this.applications);
     } catch (e) {
       console.error('Error setting up applications', e);
     }
   }
 
-  create(obj: LogStatementInterface, clientId: string): Promise<any> {
+  create(obj: LogStatementInterface, headers: IncomingHttpHeaders): Promise<any> {
     try {
-      const model = this.applications.get(clientId)?.dbAccessor;
+      const model = this.applications.get(<string>headers.clientid)?.dbAccessor;
 
       if (!model) {
         throw new Error('Unknown Client ID');
@@ -38,7 +38,8 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
 
       return model.create(obj);
     } catch (e) {
-      console.log(`Error writing log statement to client ID ${clientId}`, e);
+      console.log(`Error writing log statement to client ID ${headers.clientid}`, e);
+      throw e;
     }
   }
 
