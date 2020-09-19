@@ -13,7 +13,6 @@ const createLog = async (req: Request): Promise<any> => {
       ...req.db.getAutoLogObjectForApp(req.headers)
     };
     await req.db.create(logObject, req.headers);
-    return;
   } catch (e) {
     if (!(e instanceof SidelogError)) {
       req.logger.log(e.message, { callStack: e.stack });

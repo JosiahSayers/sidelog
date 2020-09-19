@@ -38,7 +38,7 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
 
       return model.create(obj);
     } catch (e) {
-      console.log(`Error writing log statement to client ID ${headers.clientid}`, e);
+      console.error(`Error writing log statement to client ID ${headers.clientid}`, e);
       throw e;
     }
   }
