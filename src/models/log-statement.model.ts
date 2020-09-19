@@ -18,7 +18,7 @@ export interface LogStatementInterface {
   level: LogLevels;
 }
 
-const logStatementSchema = new mongoose.Schema({
+export const logStatementSchema = new mongoose.Schema({
   message: { type: String, text: true },
   json: Object,
   level: { type: String, text: true },

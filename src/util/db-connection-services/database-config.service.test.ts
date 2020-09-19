@@ -5,6 +5,7 @@ import { DatabaseConfigService } from './database-config.service';
 import { mocked } from 'ts-jest/utils';
 import { databaseTypes } from '../../interfaces/database-config.interface';
 import { sidelogAppConfig } from './sidelog-application-config';
+import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
 
 describe('DatabaseConfigService', () => {
   const service = new DatabaseConfigService();
@@ -119,6 +120,31 @@ describe('DatabaseConfigService', () => {
           ]
         });
         expect(() => service.getConfig()).toThrowError('No clientId set on application at index 0');
+      });
+    });
+
+    describe('autoLogHeaders', () => {
+      it('warns to the console and removes the invalid header when any application has an invalid autoLogHeader', () => {
+        console.warn = jest.fn();
+        mockConfig({
+          database: {
+            connectionString: 'CONNECTION STRING',
+            type: 'mongo'
+          },
+          applications: [
+            {
+              name: 'NAME 1',
+              clientId: 'CLIENT ID 1',
+              autoLogHeaders: [
+                AutoLogHeaderEnum.CONTENT_TYPE,
+                <any>'INVALID'
+              ]
+            }
+          ]
+        });
+        service.getConfig();
+        expect(console.warn).toHaveBeenCalledWith('WARNING: INVALID is not a valid auto log option and will be ignored.');
+        expect(service.config.applications[0].autoLogHeaders).toEqual([AutoLogHeaderEnum.CONTENT_TYPE]);
       });
     });
 

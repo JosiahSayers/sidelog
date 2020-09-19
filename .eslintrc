@@ -20,6 +20,17 @@
       "error",
       "always"
     ],
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "fdescribe",
+        "message": "Do not commit focused tests, use 'describe' instead"
+      },
+      {
+        "name": "fit",
+        "message": "Do not commit focused tests, use 'it' instead"
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-inferrable-types": [

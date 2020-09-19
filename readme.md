@@ -86,6 +86,11 @@ npm install
         "approvedOrigins": [ // Optional, if provided only requests with an approved origin header will succeed.
           "https://test.com",
           "https://www.test.com"
+        ],
+        "autoLogHeaders": [ // Optional, if provided the headers contained in this array will automatically be added to each log statement's json field
+          // The supported values for this array can be found in the AutoLogHeaderEnum: https://github.com/JosiahSayers/sidelog/blob/develop/src/interfaces/application-config.interface.ts
+          "ip",
+          "origin"
         ]
       }
     ]
