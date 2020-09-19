@@ -19,7 +19,7 @@ export class ErrorLogger {
           json,
           level: 'error'
         },
-        sidelogAppConfig.clientId
+        <any>sidelogAppConfig
       );
     }
   }

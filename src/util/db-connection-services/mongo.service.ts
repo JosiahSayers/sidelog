@@ -2,10 +2,12 @@ import { DatabaseService } from '../../interfaces/db-service.interface';
 import mongoose from 'mongoose';
 import { ApplicationConfig, Application } from '../../interfaces/application-config.interface';
 import { LogStatementHelper, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
+import { BaseDatabaseService } from './base-database.service';
+import { IncomingHttpHeaders } from 'http';
 
-export class MongoService implements DatabaseService {
+export class MongoService extends BaseDatabaseService implements DatabaseService {
 
-  applicationModels = new Map<string, MongoApplication>();
+  applications: Map<string, MongoApplication>;
 
   connect(connectionString: string): Promise<any> {
     return mongoose.connect(connectionString, {
@@ -19,21 +21,16 @@ export class MongoService implements DatabaseService {
   setupApplications(applications: ApplicationConfig[]): void {
     try {
       mongoose.pluralize(null);
-      applications.forEach((app) => this.applicationModels.set(app.clientId, {
-        name: app.name,
-        clientId: app.clientId,
-        approvedOrigins: app.approvedOrigins || [],
-        dbAccessor: LogStatementHelper.createLogStatementDocument(app.name.toLowerCase())
-      }));
-      console.log(this.applicationModels);
+      applications.forEach((app) =>
+        super.onboardApplication(app, LogStatementHelper.createLogStatementDocument(app.name.toLowerCase())));
     } catch (e) {
       console.error('Error setting up applications', e);
     }
   }
 
-  create(obj: LogStatementInterface, clientId: string): Promise<any> {
+  create(obj: LogStatementInterface, headers: IncomingHttpHeaders): Promise<any> {
     try {
-      const model = this.applicationModels.get(clientId)?.dbAccessor;
+      const model = this.applications.get(<string>headers.clientid)?.dbAccessor;
 
       if (!model) {
         throw new Error('Unknown Client ID');
@@ -41,17 +38,9 @@ export class MongoService implements DatabaseService {
 
       return model.create(obj);
     } catch (e) {
-      console.log(`Error writing log statement to client ID ${clientId}`, e);
+      console.error(`Error writing log statement to client ID ${headers.clientid}`, e);
+      throw e;
     }
-  }
-
-  isValidClientId(clientIdToTest: string): boolean {
-    return !!this.applicationModels.get(clientIdToTest);
-  }
-
-  isValidOrigin(originToTest: string, clientId: string): boolean {
-    const app = this.applicationModels.get(clientId);
-    return app?.approvedOrigins.length === 0 || app?.approvedOrigins.includes(originToTest);
   }
 
 }

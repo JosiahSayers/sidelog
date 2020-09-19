@@ -1,10 +1,7 @@
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+[![Codecov master branch][codecov-master-shield]][codecov-url]
+[![Codecov develop branch][codecov-develop-shield]][codecov-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <br />
 <p align="center">
@@ -86,6 +83,11 @@ npm install
         "approvedOrigins": [ // Optional, if provided only requests with an approved origin header will succeed.
           "https://test.com",
           "https://www.test.com"
+        ],
+        "autoLogHeaders": [ // Optional, if provided the headers contained in this array will automatically be added to each log statement's json field
+          // The supported values for this array can be found in the AutoLogHeaderEnum: https://github.com/JosiahSayers/sidelog/blob/develop/src/interfaces/application-config.interface.ts
+          "ip",
+          "origin"
         ]
       }
     ]
@@ -172,12 +174,11 @@ Project Link: [https://github.com/JosiahSayers/sidelog](https://github.com/Josia
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/JosiahSayers/sidelog.svg?style=flat-square
 [contributors-url]: https://github.com/JosiahSayers/sidelog/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/JosiahSayers/sidelog.svg?style=flat-square
-[forks-url]: https://github.com/JosiahSayers/sidelog/network/members
-[stars-shield]: https://img.shields.io/github/stars/JosiahSayers/sidelog.svg?style=flat-square
-[stars-url]: https://github.com/JosiahSayers/sidelog/stargazers
-[issues-shield]: https://img.shields.io/github/issues/JosiahSayers/sidelog.svg?style=flat-square
-[issues-url]: https://github.com/JosiahSayers/sidelog/issues
+
+[codecov-develop-shield]: https://img.shields.io/codecov/c/github/JosiahSayers/sidelog/develop?style=flat-square&label=coverage%20%28develop%29
+[codecov-master-shield]: https://img.shields.io/codecov/c/github/JosiahSayers/sidelog/master?style=flat-square&label=coverage%20%28master%29
+[codecov-url]: https://codecov.io/gh/JosiahSayers/sidelog
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/josiah-sayers
 [product-screenshot]: images/screenshot.png

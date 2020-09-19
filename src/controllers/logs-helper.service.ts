@@ -8,8 +8,11 @@ const createLog = async (req: Request): Promise<any> => {
     const logObject = req.body;
     const origin = req.headers.origin;
     validateLogRequest(req, clientId, origin, logObject);
-    await req.db.create(logObject, clientId);
-    return;
+    logObject.json = {
+      ...logObject.json,
+      ...req.db.getAutoLogObjectForApp({ ...req.headers, ip: req.ip })
+    };
+    await req.db.create(logObject, req.headers);
   } catch (e) {
     if (!(e instanceof SidelogError)) {
       req.logger.log(e.message, { callStack: e.stack });

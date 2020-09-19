@@ -10,6 +10,10 @@
       "approvedOrigins": [
         "https://test.com",
         "https://www.test.com"
+      ],
+      "autoLogHeaders": [
+        "origin",
+        "user-agent"
       ]
     }
   ]

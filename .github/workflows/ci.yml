@@ -1,6 +1,8 @@
 name: Node.js CI
 
 on:
+  push:
+    branches: [ master, develop ]
   pull_request:
     branches: [ master, develop ]
 
@@ -20,3 +22,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm run ci
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.13
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage/coverage-final.json

@@ -1,11 +1,11 @@
 {
   "name": "sidelog",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Easy logging for side projects",
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --watch",
-    "test:single": "jest --passWithNoTests",
+    "test:single": "jest",
     "watch": "nodemon",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
