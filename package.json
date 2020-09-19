@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "jest --watch",
-    "test:single": "jest --coverage",
+    "test:single": "jest",
     "watch": "nodemon",
     "build": "tsc",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",

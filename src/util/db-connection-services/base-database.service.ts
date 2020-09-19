@@ -15,12 +15,10 @@ export class BaseDatabaseService {
     });
   }
 
-  /* istanbul ignore next */
   isValidClientId(clientIdToTest: string): boolean {
     return !!this.applications.get(clientIdToTest);
   }
 
-  /* istanbul ignore next */
   isValidOrigin(originToTest: string, clientId: string): boolean {
     const app = this.applications.get(clientId);
     return !!(app?.approvedOrigins.length === 0 || app?.approvedOrigins.includes(originToTest));
@@ -30,7 +28,6 @@ export class BaseDatabaseService {
     const autoLogs: Record<string, string> = {};
     const app = this.applications.get(<string>headers.clientid);
 
-    /* istanbul ignore next */
     app?.autoLogHeaders.forEach((header) => autoLogs[header] = <string>headers[header]);
 
     return autoLogs;

@@ -76,7 +76,7 @@ describe('BaseDatabaseService', () => {
       expect(service.getAutoLogObjectForApp({ clientid: 'NEW_CLIENT_ID' })).toEqual({});
     });
 
-    fit('builds and returns the expected object otherwise', () => {
+    it('builds and returns the expected object otherwise', () => {
       expect(service.getAutoLogObjectForApp({
         clientid: 'CLIENT_ID',
         referer: 'REFERER',
