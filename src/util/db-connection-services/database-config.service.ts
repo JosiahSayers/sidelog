@@ -75,8 +75,8 @@ export class DatabaseConfigService {
           }
         });
 
-        headersToRemove.forEach((header) => {
-          const index = app.autoLogHeaders.findIndex(<any>header);
+        headersToRemove.forEach((headerToRemove) => {
+          const index = app.autoLogHeaders.findIndex((autoLogHeader) => autoLogHeader === <any>headerToRemove);
           app.autoLogHeaders.splice(index, 1);
         });
       }
