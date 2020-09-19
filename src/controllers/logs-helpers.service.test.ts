@@ -7,6 +7,7 @@ import { ErrorLogger } from '../util/error-logging-service/error-logger.service'
 
 describe('LogsHelperService', () => {
   console.error = jest.fn();
+
   describe('createLog', () => {
     describe('throws an error when', () => {
       it('does not get a client id', async () => {

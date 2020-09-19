@@ -24,7 +24,7 @@ export class BaseDatabaseService {
     return !!(app?.approvedOrigins.length === 0 || app?.approvedOrigins.includes(originToTest));
   }
 
-  getAutoLogObjectForApp(headers: IncomingHttpHeaders): Record<string, string> {
+  getAutoLogObjectForApp(headers: IncomingHttpHeaders & { ip: string }): Record<string, string> {
     const autoLogs: Record<string, string> = {};
     const app = this.applications.get(<string>headers.clientid);
 

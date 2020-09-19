@@ -68,16 +68,16 @@ describe('BaseDatabaseService', () => {
     }));
 
     it('returns an empty object when the application cannot be found by the clientid', () => {
-      expect(service.getAutoLogObjectForApp({ clientid: 'OTHER_CLIENT_ID' })).toEqual({});
+      expect(service.getAutoLogObjectForApp(<any>{ clientid: 'OTHER_CLIENT_ID' })).toEqual({});
     });
 
     it('returns an empty object when the application is found but the autoLogHeaders array is empty', () => {
       service.applications.set('NEW_CLIENT_ID', mockApplication());
-      expect(service.getAutoLogObjectForApp({ clientid: 'NEW_CLIENT_ID' })).toEqual({});
+      expect(service.getAutoLogObjectForApp(<any>{ clientid: 'NEW_CLIENT_ID' })).toEqual({});
     });
 
     it('builds and returns the expected object otherwise', () => {
-      expect(service.getAutoLogObjectForApp({
+      expect(service.getAutoLogObjectForApp(<any>{
         clientid: 'CLIENT_ID',
         referer: 'REFERER',
         'user-agent': 'USER_AGENT'

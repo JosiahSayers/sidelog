@@ -16,5 +16,6 @@ export enum AutoLogHeaderEnum {
   HOST = 'host',
   ORIGIN = 'origin',
   REFERER = 'referer',
-  USER_AGENT = 'user-agent'
+  USER_AGENT = 'user-agent',
+  IP_ADDRESS = 'ip'
 }

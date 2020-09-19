@@ -8,5 +8,5 @@ export interface DatabaseService {
   create: (obj: LogStatementInterface, headers: IncomingHttpHeaders) => Promise<any>;
   isValidClientId: (clientId: string) => boolean;
   isValidOrigin: (origin: string, clientId: string) => boolean;
-  getAutoLogObjectForApp: (headers: IncomingHttpHeaders) => Record<string, string>;
+  getAutoLogObjectForApp: (headers: IncomingHttpHeaders & { ip: string }) => Record<string, string>;
 }

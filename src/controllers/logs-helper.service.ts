@@ -10,7 +10,7 @@ const createLog = async (req: Request): Promise<any> => {
     validateLogRequest(req, clientId, origin, logObject);
     logObject.json = {
       ...logObject.json,
-      ...req.db.getAutoLogObjectForApp(req.headers)
+      ...req.db.getAutoLogObjectForApp({ ...req.headers, ip: req.ip })
     };
     await req.db.create(logObject, req.headers);
   } catch (e) {
