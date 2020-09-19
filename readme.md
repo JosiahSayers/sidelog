@@ -1,7 +1,5 @@
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+[![Code Coverage][codecov-shield]][codecov-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -177,12 +175,10 @@ Project Link: [https://github.com/JosiahSayers/sidelog](https://github.com/Josia
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/JosiahSayers/sidelog.svg?style=flat-square
 [contributors-url]: https://github.com/JosiahSayers/sidelog/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/JosiahSayers/sidelog.svg?style=flat-square
-[forks-url]: https://github.com/JosiahSayers/sidelog/network/members
-[stars-shield]: https://img.shields.io/github/stars/JosiahSayers/sidelog.svg?style=flat-square
-[stars-url]: https://github.com/JosiahSayers/sidelog/stargazers
-[issues-shield]: https://img.shields.io/github/issues/JosiahSayers/sidelog.svg?style=flat-square
-[issues-url]: https://github.com/JosiahSayers/sidelog/issues
+
+[codecov-shield]: https://codecov.io/gh/JosiahSayers/sidelog/branch/develop/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/JosiahSayers/sidelog
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/josiah-sayers
 [product-screenshot]: images/screenshot.png
