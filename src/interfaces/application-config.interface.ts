@@ -10,7 +10,7 @@ export interface Application extends ApplicationConfig {
 }
 
 export enum AutoLogHeaderEnum {
-  CLIENT_ID = 'clientId',
+  CLIENT_ID = 'clientid',
   CONTENT_LENGTH = 'content-length',
   CONTENT_TYPE = 'content-type',
   HOST = 'host',
