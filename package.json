@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\"",
     "ci": "npm i && npm run lint && npm run test:single && npm run build",
     "forever": "forever start dist/server.js",
-    "start": "npm run forever"
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",

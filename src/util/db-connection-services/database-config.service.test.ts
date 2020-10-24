@@ -24,7 +24,6 @@ describe('DatabaseConfigService', () => {
   };
 
   beforeEach(() => {
-    environment.CONFIG_PATH = 'CONFIG_PATH';
     mockedFs.readFileSync.mockReturnValue('{}');
     console.error = jest.fn();
   });
@@ -32,9 +31,41 @@ describe('DatabaseConfigService', () => {
   it('instantiates', () => expect(service).toBeDefined());
 
   describe('getConfig', () => {
-    it('throws the correct error when a CONFIG_PATH is not provided', () => {
+    it('throws the correct error when a CONFIG_* variable is not provided', () => {
       environment.CONFIG_PATH = '';
-      expect(() => service.getConfig()).toThrowError('CONFIG_PATH environment variable was not provided');
+      expect(() => service.getConfig()).toThrowError('CONFIG_JSON or CONFIG_PATH environment variable was not provided, one is required');
+    });
+
+    describe('when a CONFIG_JSON variable is provided', () => {
+      beforeEach(() => {
+        environment.CONFIG_PATH = null;
+        environment.CONFIG_JSON = JSON.stringify(validConfig);
+      });
+
+      it('sets config to the parsed value of the CONFIG_JSON variable', () => {
+        service.getConfig();
+        expect(service.config).toEqual(validConfig);
+      });
+
+      it('throws an error when the value of CONFIG_JSON is not valid JSON', () => {
+        environment.CONFIG_JSON = 'invalid JSON';
+        expect(() => service.getConfig()).toThrow();
+      });
+    });
+
+    describe('when a CONFIG_PATH variable is provided', () => {
+      beforeEach(() => mockConfigFile(validConfig));
+
+      it('uses CONFIG_PATH to read from the filesystem', () => {
+        service.getConfig();
+        expect(mockedFs.readFileSync).toHaveBeenCalledWith('CONFIG_PATH', { encoding: 'utf-8' });
+        expect(service.config).toEqual(validConfig);
+      });
+
+      it('throws an error when it can\'t parse the file from disk', () => {
+        mockConfigFile('invalid JSON');
+        expect(() => service.getConfig()).toThrow();
+      });
     });
 
     describe('config file errors', () => {
@@ -43,17 +74,17 @@ describe('DatabaseConfigService', () => {
       });
 
       it('when the connection string is missing', () => {
-        mockConfig({ database: { type: 'DB_TYPE' } });
+        mockConfigFile({ database: { type: 'DB_TYPE' } });
         expect(() => service.getConfig()).toThrowError('Database connection string missing');
       });
 
       it('when the database type is missing', () => {
-        mockConfig({ database: { connectionString: 'CONNECTION STRING' } });
+        mockConfigFile({ database: { connectionString: 'CONNECTION STRING' } });
         expect(() => service.getConfig()).toThrowError('Invalid database type: undefined');
       });
 
       it('when the database type is not supported', () => {
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'UNSUPPORTED DB'
@@ -63,7 +94,7 @@ describe('DatabaseConfigService', () => {
       });
 
       it('when the applications array is missing', () => {
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'mongo'
@@ -73,7 +104,7 @@ describe('DatabaseConfigService', () => {
       });
 
       it('when the applications array is empty', () => {
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'mongo'
@@ -84,7 +115,7 @@ describe('DatabaseConfigService', () => {
       });
 
       it('when any application has no name', () => {
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'mongo'
@@ -104,7 +135,7 @@ describe('DatabaseConfigService', () => {
       });
 
       it('when any application has no clientId', () => {
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'mongo'
@@ -126,7 +157,7 @@ describe('DatabaseConfigService', () => {
     describe('autoLogHeaders', () => {
       it('warns to the console and removes the invalid header when any application has an invalid autoLogHeader', () => {
         console.warn = jest.fn();
-        mockConfig({
+        mockConfigFile({
           database: {
             connectionString: 'CONNECTION STRING',
             type: 'mongo'
@@ -145,15 +176,6 @@ describe('DatabaseConfigService', () => {
         service.getConfig();
         expect(console.warn).toHaveBeenCalledWith('WARNING: INVALID is not a valid auto log option and will be ignored.');
         expect(service.config.applications[0].autoLogHeaders).toEqual([AutoLogHeaderEnum.CONTENT_TYPE]);
-      });
-    });
-
-    describe('Valid config file', () => {
-      beforeEach(() => mockConfig(validConfig));
-
-      it('uses CONFIG_PATH to read from the filesystem', () => {
-        service.getConfig();
-        expect(mockedFs.readFileSync).toHaveBeenCalledWith('CONFIG_PATH', { encoding: 'utf-8' });
       });
     });
   });
@@ -190,7 +212,10 @@ describe('DatabaseConfigService', () => {
     });
   });
 
-  function mockConfig(obj: any): void {
-    mockedFs.readFileSync.mockReturnValue(JSON.stringify(obj));
+  function mockConfigFile(obj: string | { [key: string]: any }): void {
+    environment.CONFIG_PATH = 'CONFIG_PATH';
+    environment.CONFIG_JSON = null;
+    obj = typeof obj === 'string' ? obj : JSON.stringify(obj);
+    mockedFs.readFileSync.mockReturnValue(obj);
   }
 });
