@@ -93,12 +93,17 @@ npm install
     ]
   }
   ```
-4. Run application
+4. (A) Run application (using config file on disk)
 ```sh
 CONFIG_PATH=<path_to_config_file> npm start
 
 // CONFIG_PATH=./config-dev/docker-mongo.config.json npm start //
 ```
+4. (B) Run application (using config passed in as JSON string)
+```sh
+CONFIG_JSON=<stringified config content> npm start
+```
+
 Optional Environment Variables
   - ENV_FILE: Used to specify a path to an `env` file to use instead of passing in values at runtime, defaults to '.env';
   - PORT: Used to specify which port sidelog should run on, defaults to 3000.

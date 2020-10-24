@@ -14,7 +14,7 @@ export class DatabaseConfigService {
   logger: ErrorLogger;
 
   getConfig(): void {
-    this.readConfigFromDisk();
+    this.readConfig();
     this.validateConfig();
   }
 
@@ -24,13 +24,27 @@ export class DatabaseConfigService {
     return this.databaseService.connect(this.config.database.connectionString);
   }
 
+  private readConfig(): void {
+    if (environment.CONFIG_JSON) {
+      this.readConfigFromEnvironment();
+    } else if (environment.CONFIG_PATH) {
+      this.readConfigFromDisk();
+    } else {
+      throw new Error('CONFIG_JSON or CONFIG_PATH environment variable was not provided, one is required');
+    }
+  }
+
+  private readConfigFromEnvironment(): void {
+    try {
+      this.config = JSON.parse(environment.CONFIG_JSON);
+    } catch (e) {
+      console.error('Error parsing passed in config', e.message);
+      throw e;
+    }
+  }
+
   private readConfigFromDisk(): void {
     try {
-
-      if (!environment.CONFIG_PATH) {
-        throw new Error('CONFIG_PATH environment variable was not provided');
-      }
-
       const configString = fs.readFileSync(environment.CONFIG_PATH, { encoding: 'utf-8' });
       this.config = JSON.parse(configString);
     } catch (e) {
