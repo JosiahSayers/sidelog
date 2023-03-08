@@ -1,7 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
-
 import { environment } from './util/environment';
 import { DatabaseConfigService } from './util/db-connection-services/database-config.service';
 import logsRouter from './controllers/logs.controller';
@@ -28,7 +26,7 @@ const errorLogger = new ErrorLogger(databaseConfigService.databaseService);
 
 app.set('port', environment.PORT);
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use((req, res, next) => {
   req.db = databaseConfigService.databaseService;
