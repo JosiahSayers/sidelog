@@ -1,5 +1,5 @@
 import { DatabaseService } from '../../interfaces/db-service.interface';
-import mongoose from 'mongoose';
+import { connect, pluralize, Model } from 'mongoose';
 import { ApplicationConfig, Application } from '../../interfaces/application-config.interface';
 import { LogStatementHelper, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
 import { BaseDatabaseService } from './base-database.service';
@@ -10,17 +10,12 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
   applications!: Map<string, MongoApplication>;
 
   connect(connectionString: string): Promise<any> {
-    return mongoose.connect(connectionString, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
-    });
+    return connect(connectionString);
   }
 
   setupApplications(applications: ApplicationConfig[]): void {
     try {
-      mongoose.pluralize(null);
+      pluralize(null);
       applications.forEach((app) =>
         super.onboardApplication(app, LogStatementHelper.createLogStatementDocument(app.name.toLowerCase())));
     } catch (e) {
@@ -46,5 +41,5 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
 }
 
 interface MongoApplication extends Application {
-  dbAccessor: mongoose.Model<LogStatementDocument>
+  dbAccessor: Model<LogStatementDocument>
 }

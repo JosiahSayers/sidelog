@@ -36,7 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/heartbeat', (req, res) => res.sendStatus(200));
+app.use('/heartbeat', (req, res) => res.send(process.env.NODE_ENV));
 
 app.use('/logs', logsRouter);
 

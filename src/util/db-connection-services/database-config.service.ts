@@ -1,5 +1,5 @@
 import { databaseTypes } from '../../interfaces/database-config.interface';
-import fs from 'fs';
+import * as fs from 'fs';
 import { DatabaseService } from '../../interfaces/db-service.interface';
 import { SidelogConfig } from '../../interfaces/sidelog-config.interface';
 import { environment } from '../environment';
@@ -90,9 +90,9 @@ export class DatabaseConfigService {
         });
 
         headersToRemove.forEach((headerToRemove) => {
-          const index = app.autoLogHeaders?.findIndex((autoLogHeader) => autoLogHeader === <any>headerToRemove);
+          const index = app.autoLogHeaders!.findIndex((autoLogHeader) => autoLogHeader === <any>headerToRemove);
           if (index) {
-            app.autoLogHeaders?.splice(index, 1);
+            app.autoLogHeaders!.splice(index, 1);
           }
         });
       }

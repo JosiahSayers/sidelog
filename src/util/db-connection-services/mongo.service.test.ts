@@ -1,39 +1,33 @@
 import { MongoService } from './mongo.service';
-import mongoose from 'mongoose';
-import { mocked } from 'ts-jest/utils';
+import * as mongoose from 'mongoose';
 import { LogStatementHelper } from '../../models/log-statement.model';
 import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
 jest.mock('mongoose');
 
 describe('MongoService', () => {
-  const mockedDB = mocked(mongoose);
   const service = new MongoService();
   LogStatementHelper.createLogStatementDocument = jest.fn().mockImplementation((name: string) => `${name} DB ACCESSOR`);
 
   describe('connect', () => {
     it('calls mongoose\'s connect method with the correct arguments', () => {
+      const spy = jest.spyOn(mongoose, 'connect');
       service.connect('CONNECTION STRING');
-      expect(mockedDB.connect).toHaveBeenCalledWith(
+      expect(spy).toHaveBeenCalledWith(
         'CONNECTION STRING',
-        {
-          useNewUrlParser: true,
-          useCreateIndex: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false
-        }
       );
     });
 
     it('returns the value of mongoose.connect', () => {
-      mockedDB.connect.mockReturnValue(<any>'CONNECT RETURN VALUE');
+      jest.spyOn(mongoose, 'connect').mockReturnValue(<any>'CONNECT RETURN VALUE');
       expect(service.connect('')).toBe('CONNECT RETURN VALUE');
     });
   });
 
   describe('setupApplications', () => {
     it('turns off mongoose pluralization', () => {
+      const spy = jest.spyOn(mongoose, 'pluralize');
       service.setupApplications([]);
-      expect(mockedDB.pluralize).toHaveBeenCalledWith(null);
+      expect(spy).toHaveBeenCalledWith(null);
     });
 
     it('populates the map using the passed in array', () => {
@@ -77,8 +71,8 @@ describe('MongoService', () => {
     });
 
     it('logs an error to the console when there is an error setting up the applications', () => {
+      jest.spyOn(mongoose, 'pluralize').mockImplementation(() => { throw new Error('TEST_ERROR'); });
       console.error = jest.fn();
-      mockedDB.pluralize.mockImplementation(() => { throw new Error('TEST_ERROR'); });
       service.setupApplications([]);
       expect(console.error).toHaveBeenCalledWith('Error setting up applications', new Error('TEST_ERROR'));
     });

@@ -60,8 +60,26 @@ describe('LogsHelperService', () => {
         }));
       });
 
+      it('gets an undefined origin', async () => {
+        const req = createMockRequest('CLIENT_ID', undefined as any, {});
+        req.db.isValidClientId.mockReturnValue(true);
+        req.db.isValidOrigin.mockReturnValue(false);
+        let error;
+        try {
+          await LogsHelperService.createLog(<any>req);
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error).toEqual(buildError({
+          message: 'Unapproved origin',
+          developerMessage: 'The origin Unknown has not been approved for use with client ID CLIENT_ID',
+          responseCode: 400
+        }));
+      });
+
       it('does not get a log object', async () => {
-        const req = createMockRequest('CLIENT ID', '', null);
+        const req = createMockRequest('CLIENT ID', '', null as any);
         req.db.isValidClientId.mockReturnValue(true);
         req.db.isValidOrigin.mockReturnValue(true);
         let error;
