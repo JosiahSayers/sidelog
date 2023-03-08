@@ -21,14 +21,17 @@ export class BaseDatabaseService {
 
   isValidOrigin(originToTest: string, clientId: string): boolean {
     const app = this.applications.get(clientId);
-    return !!(app?.approvedOrigins.length === 0 || app?.approvedOrigins.includes(originToTest));
+    return !!(
+      app?.approvedOrigins
+      && (app.approvedOrigins?.length === 0 || app.approvedOrigins?.includes(originToTest))
+    );
   }
 
   getAutoLogObjectForApp(headers: IncomingHttpHeaders & { ip: string }): Record<string, string> {
     const autoLogs: Record<string, string> = {};
     const app = this.applications.get(<string>headers.clientid);
 
-    app?.autoLogHeaders.forEach((header) => autoLogs[header] = <string>headers[header]);
+    app?.autoLogHeaders?.forEach((header) => autoLogs[header] = <string>headers[header]);
 
     return autoLogs;
   }

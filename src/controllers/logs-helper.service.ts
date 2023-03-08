@@ -6,14 +6,14 @@ const createLog = async (req: Request): Promise<any> => {
   try {
     const clientId = <string>req.headers.clientid;
     const logObject = req.body;
-    const origin = req.headers.origin;
+    const origin = req.headers.origin ?? 'Unknown';
     validateLogRequest(req, clientId, origin, logObject);
     logObject.json = {
       ...logObject.json,
       ...req.db.getAutoLogObjectForApp({ ...req.headers, ip: req.ip })
     };
     await req.db.create(logObject, req.headers);
-  } catch (e) {
+  } catch (e: any) {
     if (!(e instanceof SidelogError)) {
       req.logger.log(e.message, { callStack: e.stack });
       throw buildError({

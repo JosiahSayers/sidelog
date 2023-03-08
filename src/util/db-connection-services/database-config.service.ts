@@ -9,9 +9,9 @@ import { ErrorLogger } from '../error-logging-service/error-logger.service';
 
 export class DatabaseConfigService {
 
-  config: SidelogConfig;
-  databaseService: DatabaseService;
-  logger: ErrorLogger;
+  config!: SidelogConfig;
+  databaseService!: DatabaseService;
+  logger!: ErrorLogger;
 
   getConfig(): void {
     this.readConfig();
@@ -19,35 +19,35 @@ export class DatabaseConfigService {
   }
 
   connect(): Promise<any> {
-    this.databaseService = databaseTypes.get(this.config.database.type);
+    this.databaseService = databaseTypes.get(this.config.database.type)!;
     this.databaseService.setupApplications([...this.config.applications, sidelogAppConfig]);
     return this.databaseService.connect(this.config.database.connectionString);
   }
 
   private readConfig(): void {
     if (environment.CONFIG_JSON) {
-      this.readConfigFromEnvironment();
+      this.readConfigFromEnvironment(environment.CONFIG_JSON);
     } else if (environment.CONFIG_PATH) {
-      this.readConfigFromDisk();
+      this.readConfigFromDisk(environment.CONFIG_PATH);
     } else {
       throw new Error('CONFIG_JSON or CONFIG_PATH environment variable was not provided, one is required');
     }
   }
 
-  private readConfigFromEnvironment(): void {
+  private readConfigFromEnvironment(configJson: string): void {
     try {
-      this.config = JSON.parse(environment.CONFIG_JSON);
-    } catch (e) {
+      this.config = JSON.parse(configJson);
+    } catch (e: any) {
       console.error('Error parsing passed in config', e.message);
       throw e;
     }
   }
 
-  private readConfigFromDisk(): void {
+  private readConfigFromDisk(configPath: string): void {
     try {
-      const configString = fs.readFileSync(environment.CONFIG_PATH, { encoding: 'utf-8' });
+      const configString = fs.readFileSync(configPath, { encoding: 'utf-8' });
       this.config = JSON.parse(configString);
-    } catch (e) {
+    } catch (e: any) {
       console.error('Error reading config file from disk', e.message);
       throw e;
     }
@@ -90,8 +90,10 @@ export class DatabaseConfigService {
         });
 
         headersToRemove.forEach((headerToRemove) => {
-          const index = app.autoLogHeaders.findIndex((autoLogHeader) => autoLogHeader === <any>headerToRemove);
-          app.autoLogHeaders.splice(index, 1);
+          const index = app.autoLogHeaders?.findIndex((autoLogHeader) => autoLogHeader === <any>headerToRemove);
+          if (index) {
+            app.autoLogHeaders?.splice(index, 1);
+          }
         });
       }
     });

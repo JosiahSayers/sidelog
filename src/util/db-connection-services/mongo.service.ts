@@ -7,7 +7,7 @@ import { IncomingHttpHeaders } from 'http';
 
 export class MongoService extends BaseDatabaseService implements DatabaseService {
 
-  applications: Map<string, MongoApplication>;
+  applications!: Map<string, MongoApplication>;
 
   connect(connectionString: string): Promise<any> {
     return mongoose.connect(connectionString, {
