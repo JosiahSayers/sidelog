@@ -22,8 +22,7 @@ export class BaseDatabaseService {
   isValidOrigin(originToTest: string, clientId: string): boolean {
     const app = this.applications.get(clientId);
     return !!(
-      app?.approvedOrigins
-      && (app.approvedOrigins?.length === 0 || app.approvedOrigins?.includes(originToTest))
+      app?.approvedOrigins?.length === 0 || app?.approvedOrigins?.includes(originToTest)
     );
   }
 
