@@ -1,15 +1,14 @@
-import fs from 'fs';
 jest.mock('fs');
+import * as fs from 'fs';
 import { environment } from '../../util/environment';
 import { DatabaseConfigService } from './database-config.service';
-import { mocked } from 'ts-jest/utils';
 import { databaseTypes } from '../../interfaces/database-config.interface';
 import { sidelogAppConfig } from './sidelog-application-config';
 import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
 
 describe('DatabaseConfigService', () => {
   const service = new DatabaseConfigService();
-  const mockedFs = mocked(fs);
+  const mockedFs = jest.mocked(fs);
   const validConfig = {
     database: {
       connectionString: 'CONNECTION STRING',
@@ -38,7 +37,7 @@ describe('DatabaseConfigService', () => {
 
     describe('when a CONFIG_JSON variable is provided', () => {
       beforeEach(() => {
-        environment.CONFIG_PATH = null;
+        environment.CONFIG_PATH = null as any;
         environment.CONFIG_JSON = JSON.stringify(validConfig);
       });
 
@@ -214,7 +213,7 @@ describe('DatabaseConfigService', () => {
 
   function mockConfigFile(obj: string | { [key: string]: any }): void {
     environment.CONFIG_PATH = 'CONFIG_PATH';
-    environment.CONFIG_JSON = null;
+    environment.CONFIG_JSON = null as any;
     obj = typeof obj === 'string' ? obj : JSON.stringify(obj);
     mockedFs.readFileSync.mockReturnValue(obj);
   }

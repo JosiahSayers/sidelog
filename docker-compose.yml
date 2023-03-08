@@ -1,24 +1,28 @@
-version: '3.4'
+version: '3ß'
 
 services:
-  sidelog:
+  app:
     image: sidelog
     build: .
     environment:
       NODE_ENV: development
-      CONFIG_PATH: /usr/src/app/config-dev/docker-mongo.config.json
+      CONFIG_PATH: /app/config-dev/docker-mongo.config.json
     ports:
       - 3000:3000
     volumes:
-      - .:/usr/src/app
+      - .:/app
     links:
       - mongodb
+    command: sh -c "npm run watch"
+
   mongodb:
     image: mongo:latest
     ports:
       - 27017:27017
     volumes:
       - data:/data/db
+    logging:
+      driver: none
 
 volumes:
   data:
