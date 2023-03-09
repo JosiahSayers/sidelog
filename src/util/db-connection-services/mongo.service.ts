@@ -1,5 +1,5 @@
 import { DatabaseService } from '../../interfaces/db-service.interface';
-import { connect, pluralize, Model } from 'mongoose';
+import { connect, pluralize, Model, connection, Connection } from 'mongoose';
 import { ApplicationConfig, Application } from '../../interfaces/application-config.interface';
 import { LogStatementHelper, LogStatementDocument, LogStatementInterface } from '../../models/log-statement.model';
 import { BaseDatabaseService } from './base-database.service';
@@ -36,6 +36,14 @@ export class MongoService extends BaseDatabaseService implements DatabaseService
       console.error(`Error writing log statement to client ID ${headers.clientid}`, e);
       throw e;
     }
+  }
+
+  get connection(): Connection {
+    return connection;
+  }
+
+  async isConnected(): Promise<boolean> {
+    return this.connection.readyState === 1;
   }
 
 }

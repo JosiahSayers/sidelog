@@ -34,7 +34,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/heartbeat', (req, res) => res.send(process.env.NODE_ENV));
+app.get('/health', async (req, res) => {
+  const dbConnected = await req.db.isConnected();
+  return res.status(dbConnected ? 200 : 500).json({
+    now: new Date().getTime(),
+    dbConnected,
+    version: process.env.npm_package_version,
+  });
+});
 
 app.use('/logs', logsRouter);
 

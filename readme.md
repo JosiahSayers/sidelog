@@ -1,6 +1,5 @@
 [![Contributors][contributors-shield]][contributors-url]
-[![Codecov master branch][codecov-master-shield]][codecov-url]
-[![Codecov develop branch][codecov-develop-shield]][codecov-url]
+[![Codecov main branch][codecov-main-shield]][codecov-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <br />
@@ -180,8 +179,7 @@ Project Link: [https://github.com/JosiahSayers/sidelog](https://github.com/Josia
 [contributors-shield]: https://img.shields.io/github/contributors/JosiahSayers/sidelog.svg?style=flat-square
 [contributors-url]: https://github.com/JosiahSayers/sidelog/graphs/contributors
 
-[codecov-develop-shield]: https://img.shields.io/codecov/c/github/JosiahSayers/sidelog/develop?style=flat-square&label=coverage%20%28develop%29
-[codecov-master-shield]: https://img.shields.io/codecov/c/github/JosiahSayers/sidelog/master?style=flat-square&label=coverage%20%28master%29
+[codecov-main-shield]: https://codecov.io/gh/JosiahSayers/sidelog/branch/main/graph/badge.svg?token=0C4JHM7YV3
 [codecov-url]: https://codecov.io/gh/JosiahSayers/sidelog
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
