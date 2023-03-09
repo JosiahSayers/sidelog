@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/health', async (req, res) => {
+app.get('/health', async (req, res) => {
   const dbConnected = await req.db.isConnected();
   return res.status(dbConnected ? 200 : 500).json({
     now: new Date().getTime(),
