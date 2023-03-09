@@ -1,8 +1,8 @@
+jest.mock('mongoose');
 import { MongoService } from './mongo.service';
-import * as mongoose from 'mongoose';
 import { LogStatementHelper } from '../../models/log-statement.model';
 import { AutoLogHeaderEnum } from '../../interfaces/application-config.interface';
-jest.mock('mongoose');
+import * as mongoose from 'mongoose';
 
 describe('MongoService', () => {
   const service = new MongoService();
@@ -91,6 +91,24 @@ describe('MongoService', () => {
       const returnValue = service.create(<any>{ testObject: 'TEST' }, { clientid: 'CLIENT_ID' });
       expect(returnValue).toBe('WRITTEN TO DB RETURN VALUE');
       expect(mockApp.dbAccessor.create).toHaveBeenCalledWith({ testObject: 'TEST' });
+    });
+  });
+
+  describe('connection', () => {
+    it('returns the mongoose connection value', () => {
+      expect(service.connection).toEqual(mongoose.connection);
+    });
+  });
+
+  describe('isConnected', () => {
+    it('returns true when mongo is connection', async () => {
+      jest.spyOn(service, 'connection', 'get').mockReturnValue(<any>{ readyState: 1 });
+      expect(await service.isConnected()).toBe(true);
+    });
+
+    it('returns false when mongo is not connected', async () => {
+      jest.spyOn(service, 'connection', 'get').mockReturnValue(<any>{ readyState: 0 });
+      expect(await service.isConnected()).toBe(false);
     });
   });
 });

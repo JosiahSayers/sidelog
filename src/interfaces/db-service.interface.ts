@@ -9,4 +9,5 @@ export interface DatabaseService {
   isValidClientId: (clientId: string) => boolean;
   isValidOrigin: (origin: string, clientId: string) => boolean;
   getAutoLogObjectForApp: (headers: IncomingHttpHeaders & { ip: string }) => Record<string, string>;
+  isConnected: () => Promise<boolean>;
 }
